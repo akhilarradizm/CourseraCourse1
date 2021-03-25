@@ -1,72 +1,63 @@
-public class Part1 {
-    
-    public int findStopCodon(String dna, int startIndex, String stopCodon) {
-        startIndex = dna.indexOf("ATG");
-        int currIndex = dna.indexOf(stopCodon, startIndex + 3);
-        while (currIndex != -1) {
-            int diff = (currIndex - startIndex) % 3;
-            if (diff == 0) {
-                return currIndex;
-            }
-            else {
-                currIndex = dna.indexOf(stopCodon, currIndex +1);
-            }
+public class Part2 {
+    public int howMany(String stringa, String stringb){
+        int count = 0;
+        int firstOccur = stringb.indexOf(stringa);
+        if (firstOccur > -1) {
+            count = count+1;
+        
+        
+        while (stringb.indexOf(stringa, firstOccur) != -1 && firstOccur != -1) {
+            count = count +1;
+            firstOccur = stringb.indexOf(stringa, firstOccur+stringa.length());
         }
-        return dna.length();
-    }
-    
-    public String findGene(String dna){
-        int atgCodon = dna.indexOf("ATG");
-        
-        if (atgCodon == -1) {
-            return "NO ATG CODON FOUND";
+        count = count -1;
         }
-        int taaCodon = findStopCodon(dna, atgCodon, "TAA");
-        int tagCodon = findStopCodon(dna, atgCodon, "TAG");
-        int tgaCodon = findStopCodon(dna, atgCodon, "TGA");
-        int tempCodon = Math.min(taaCodon, tagCodon);
-        int dnaFin = Math.min(tempCodon, tgaCodon);
-        if (dnaFin == dna.length()) {
-            return "NO GENE FOUND";
+        else {
+            count=0;
         }
-        return dna.substring(atgCodon, dnaFin+3);
+        return count;
     }
-    
-    public void testFindGene(){
-        String dna= "AGDEGAASZZATAAAAA";
-        System.out.println("The dna string is :" + dna);
-        String gene = findGene(dna);
-        System.out.println("Gene found is :" + gene);
-        
-        dna= "aaaaaaATGaaaaaaaaaTAGaaaa";
-        System.out.println("The dna string is :" + dna);
-        gene = findGene(dna);
-        System.out.println("Gene found is :" + gene);
-        
-        dna= "aaaaaaATGaaaaaaaaaTAGTTATGAaaa";
-        System.out.println("The dna string is :" + dna);
-        gene = findGene(dna);
-        System.out.println("Gene found is :" + gene);
-        
-        dna= "aaaaaaATGaaaaaaaaaAAAAaaa";
-        System.out.println("The dna string is :" + dna);
-        gene = findGene(dna);
-        System.out.println("Gene found is :" + gene);
-    }
-    
-    public void prrintAllGenes(){
-        String dna= "aaaaaaATGaaaaaaaaaTAGTTATGAaaa"; 
-        dna= "aaaaaaATGaaaaaaaaaTAGaaaa";
-        dna = "AGDEGAASZZATAAAAA";
-        while (true) {
-            System.out.println("printing genes" + findGene(dna));
-            if (findGene(dna).length() == -1) {
-                break;
-            }
-            
+    public void testHowMany(){
+        String stringa = "GAA";
+        String stringb = "ATGAACGAATTGAATC";
+        howMany(stringa,stringb);
+        if (howMany(stringa,stringb) == 0) {
+            System.out.println("no occurrence found");
         }
-         
-        
-        
-    }
+        else{
+            System.out.println("Last Count is: " + howMany(stringa,stringb));
+        }
+        stringa = "AA";
+        stringb = "ATAAAA";
+        howMany(stringa,stringb);
+        if (howMany(stringa,stringb) == 0) {
+            System.out.println("no occurrence found");
+        }
+        else{
+            System.out.println("Last Count is: " + howMany(stringa,stringb));
+        }
+        stringa = "AA";
+        stringb = "ATABABAB";
+        howMany(stringa,stringb);
+        if (howMany(stringa,stringb) == 0) {
+            System.out.println("no occurrence found");
+        }
+        else{
+            System.out.println("Last Count is: " + howMany(stringa,stringb));
+        }
+        stringa = "ACAB";
+        stringb = "AAAAACABACABAAAACABACABAA";
+        howMany(stringa,stringb);
+        if (howMany(stringa,stringb) == 0) {
+            System.out.println("no occurrence found");
+        }
+        else{
+            System.out.println("Last Count is: " + howMany(stringa,stringb));
+        }
+        }
+        public static void main(String[] args)
+        {
+            Part2 p = new Part2();
+            p.testHowMany();
+        }
 }

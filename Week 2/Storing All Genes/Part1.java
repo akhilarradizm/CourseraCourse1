@@ -53,21 +53,10 @@ public class Part1 {
         gene = findGene(dna);
         System.out.println("Gene found is :" + gene);
     }
-    
-    public void prrintAllGenes(){
-        String dna= "aaaaaaATGaaaaaaaaaTAGTTATGAaaa"; 
-        dna= "aaaaaaATGaaaaaaaaaTAGaaaa";
-        dna = "AGDEGAASZZATAAAAA";
-        while (true) {
-            System.out.println("printing genes" + findGene(dna));
-            if (findGene(dna).length() == -1) {
-                break;
-            }
-            
-        }
-         
-        
-        
+     public static void main(String[] args)
+     {
+         Part1 p= new Part1();
+         p.testFindGene();
     }
 }
 

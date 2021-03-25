@@ -32,27 +32,21 @@ public class AnalyzeBabyNames {
     }
     
     public double getAverageRank(String name, String gender) {
-        // Allow user to select a range of files
         DirectoryResource dir = new DirectoryResource();
         double totalRank = 0.0;
         int count = 0;
         for (File f : dir.selectedFiles()) {
-            // Extract current year from file name
             int currentYear = Integer.parseInt(f.getName().substring(3,7));
-            // Determine rank of name in current year
             int currentRank = getRank(currentYear, name, gender);
-            // Add rank to total and increment count
             totalRank += currentRank;
             count++;
         }
-        // Return calculated average rank
         if (totalRank == 0) {
             return -1;
         }
         double average = totalRank/count;
         return average;
     }
-    
     public void testGetAverageRank() {
         String name = "Susan";
         String gender = "F";
@@ -61,29 +55,22 @@ public class AnalyzeBabyNames {
     }
     
     public int yearOfHighestRank(String name, String gender) {
-        // Allow user to select a range of files
         DirectoryResource dir = new DirectoryResource();
         int year = 0;
         int rank = 0;
-        // For every file the user selected
         for (File f : dir.selectedFiles()) {
-            // Extract current year from file name
             int currentYear = Integer.parseInt(f.getName().substring(3,7));
-            // Determine rank of name in current year
             int currentRank = getRank(currentYear, name, gender);
             System.out.println("Rank in year " + currentYear + ": " + currentRank);
-            // If current rank isn't invalid
             if (currentRank != -1) {
-                // If on first file or if current rank is higher than saved rank
                 if (rank == 0 || currentRank < rank) {
-                    // Update tracker variables
                     rank = currentRank;
                     year = currentYear;
                 } 
             }
         }
         
-        if (year == 0) {
+        if (year==0) {
             return -1; 
         }
         return year;
@@ -121,18 +108,16 @@ public class AnalyzeBabyNames {
                 currentRank++;
             }
         }
-        
         return "NO NAME";
     }
     
     public void testGetName() {
-        int year = 1982;
-        int rank = 450;
+        int year=1982;
+        int rank=450;
         String gender = "M";
         String name = getName(year, rank, gender);
         System.out.println("In " + year + ", the " + gender + " at rank " + rank + " was " + name);
     }
-    
     public int getRank(int year, String name, String gender) {
         int rank = 1;
         for (CSVRecord record : getFileParser(year)) {
@@ -153,7 +138,6 @@ public class AnalyzeBabyNames {
         int rank = getRank(year, name, gender);
         System.out.println("Rank of " + name + ", " + gender + ", in " + year + ": " + rank);  
     }
-
     public void totalBirths () {
         FileResource fr = new FileResource();
         int totalBirths = 0;
@@ -187,10 +171,20 @@ public class AnalyzeBabyNames {
         System.out.println(totalGirls);
         System.out.println(totalBoys);
     }
-    
     public CSVParser getFileParser(int year) {
         FileResource fr = new FileResource(String.format("data/us_babynames_by_year/yob%s.csv", year));
         return fr.getCSVParser(false);
+    }
+    public static void main(Strin[] args)
+    {
+        AnalyzeBabyNames analyze=new AnalyzeBabyNames();
+        analyze.testGetAverageRank();
+        analyze.testGetName();
+        analyze.testGetRank();
+        analyze.totalBirths();
+        analyze.testGetTotalBirthsRankedHigher();
+        analyze.testWhatIsNameInYear();
+        analyze.testYearOfHighestRank();
     }
 }
 

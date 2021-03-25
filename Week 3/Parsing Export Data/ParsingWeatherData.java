@@ -5,21 +5,14 @@ import java.io.File;
 import org.apache.commons.csv.*;
 
 public class ParsingWeatherData {
-
-	/** The method returns the CSVRecord with the coldest temperature in the file and thus all the information about the coldest temperature */
 	public static CSVRecord coldestHourInFile(CSVParser parser) {
-		//start with largestSoFar as nothing
-		CSVRecord smallestSoFar = null;
-		//For each row (currentRow) in the CSV File
+		CSVRecord smallest = null;
 		for (CSVRecord currentRow : parser) {
-			// use method to compare two records
-			smallestSoFar = getSmallestOfTwo(currentRow, smallestSoFar);
+			smallest = getSmallestOfTwo(currentRow, smallest);
 		}
-		//The smallestSoFar is the answer
-		return smallestSoFar;
+		return smallest;
 	}
-	
-	/** The method tests coldestHourInFile and prints out information about that coldest temperature */
+
 	public static void testColdestHourInFile() {
 		FileResource fr = new FileResource("nc_weather/2014/weather-2014-05-01.csv");
 		CSVRecord smallest = coldestHourInFile(fr.getCSVParser());
@@ -75,35 +68,27 @@ public class ParsingWeatherData {
 	}
 	
 	public static CSVRecord lowestHumidityInFile(CSVParser parser) {
-		//start with lowestSoFar as nothing
-		CSVRecord lowestSoFar = null;
-		//For each row (currentRow) in the CSV File
+		CSVRecord lowest=null;
 		for (CSVRecord currentRow : parser) {
-			// use method to compare two records
-			lowestSoFar = getSmallestHumidityOfTwo(currentRow, lowestSoFar);
+			lowest=getSmallestHumidityOfTwo(currentRow,lowest);
 		}
-		//The smallestSoFar is the answer
-		return lowestSoFar;
+		return lowest;
 	}
 	
 	public static CSVRecord getSmallestHumidityOfTwo (CSVRecord currentRow, CSVRecord smallestSoFar) {
-		//If smallestSoFar is nothing
-		if (smallestSoFar == null) {
-			smallestSoFar = currentRow;
+		if (smallest == null) {
+			smallest=currentRow;
 		}
-		//Otherwise
 		else {
 		    if (currentRow.get("Humidity").length() != 3){
-			    double currentTemp = Double.parseDouble(currentRow.get("Humidity"));
-			    double smallestTemp = Double.parseDouble(smallestSoFar.get("Humidity"));
-			    //Check if currentRow’s temperature < smallestSoFar’s
-			    if (currentTemp < smallestTemp && currentTemp != -9999) {
-				    //If so update smallestSoFar to currentRow
-				    smallestSoFar = currentRow;
+			    double currentTemp=Double.parseDouble(currentRow.get("Humidity"));
+			    double smallestTemp=Double.parseDouble(smallest.get("Humidity"));
+			    if (currentTemp<smallestTemp && currentTemp != -9999) {
+				    smallest=currentRow;
 			    }
 		    }
         }
-		return smallestSoFar;
+		return smallest;
 	}
 	
 	public static void testlowestHumidityInFile() {
@@ -112,21 +97,16 @@ public class ParsingWeatherData {
 		System.out.println("Lowest humidity was " + smallest.get("Humidity") +
 				   " at " + smallest.get("DateUTC"));
 	}
-	
-	
+
 	public static CSVRecord lowestHumidityInManyFiles() {
-		CSVRecord lowestSoFar = null;
-		DirectoryResource dr = new DirectoryResource();
-		// iterate over files
+		CSVRecord lowest=null;
+		DirectoryResource dr=new DirectoryResource();
 		for (File f : dr.selectedFiles()) {
-			FileResource fr = new FileResource(f);
-			// use method to get largest in file.
-			CSVRecord currentRow = lowestHumidityInFile(fr.getCSVParser());
-			// use method to compare two records
-			lowestSoFar = getSmallestHumidityOfTwo(currentRow, lowestSoFar);
+			FileResource fr=new FileResource(f);
+			CSVRecord currentRow=lowestHumidityInFile(fr.getCSVParser());
+			lowest=getSmallestHumidityOfTwo(currentRow, lowest);
 		}
-		//The largestSoFar is the answer
-		return lowestSoFar;
+		return lowest;
 	}
 	
 	public static void testLowestHumidityInManyFiles() {
@@ -137,7 +117,7 @@ public class ParsingWeatherData {
 	public static double averageTemperatureInFile(CSVParser parser){
 		double sum=0;
 		double avarage =0;
-		int count = 1;
+		int count=1;
 		for (CSVRecord currentRow : parser) {
 			double currentTemp = Double.parseDouble(currentRow.get("TemperatureF"));
 			sum += currentTemp;
@@ -183,13 +163,14 @@ public class ParsingWeatherData {
     }
 
 	
-	// demo
+
 	public static void main(String[] args) {
-			//testColdestHourInFile();
-			//testFileWithColdestTemperature();
-			//testlowestHumidityInFile();
-			//testLowestHumidityInManyFiles();
-			//testAverageTemperatureInFile();
-			testAverageTemperatureWithHighHumidityInFile();
+		ParsingWeatherData parse=new ParsingWeatherData();
+			parse.testColdestHourInFile();
+			parse.testFileWithColdestTemperature();
+			parse.testlowestHumidityInFile();
+			parse.testLowestHumidityInManyFiles();
+			parse.testAverageTemperatureInFile();
+			parse.testAverageTemperatureWithHighHumidityInFile();
 		}
 }

@@ -122,4 +122,11 @@ public class Part3 {
         dna= "ATGTAGATGTAAATGTAA";
         System.out.println("I should find 3 and found these amount of genes:" + countGenes(dna));
     }
+    public static void main(String[] args)
+    {
+        Part3 p=new Part3();
+        p.testCountGenes();
+        p.testFindGene();
+        p.testLast();
+    }
 }
